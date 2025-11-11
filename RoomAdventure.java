@@ -3,11 +3,14 @@
  * Name: Lane Ingles
  * Github: 1PatentPending1
  * Repo Link: https://github.com/1PatentPending1/Room-Adventure-Java.git
- * Date: 11/7/25
+ * Date: 11/11/25
  * Description: A simple text-based adventure game where players navigate through different rooms.
  * Additions: 
- * 
- * 
+ * Added a "win" condition where the player must find a key and enter a locked door to end the game. Although you 
+ * don't actually win, you kinda loose but its up to interpretation.
+ * added the new room which contains very few descriptions while also adding a locked door that is interactable with the key 
+ * to the game.
+ * Instantiated a 5th room, added a getName function, revamped the handleGo function.
  * 
  * 
  * AI has been used to make the following quality of life changes to the initial template purely for my own convenience:
