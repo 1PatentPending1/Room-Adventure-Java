@@ -1,4 +1,27 @@
-// Locked room and win condition
+/*
+ * Room Adventure Game
+ * Name: Lane Ingles
+ * Github: 1PatentPending1
+ * Repo Link: https://github.com/1PatentPending1/Room-Adventure-Java.git
+ * Date: 11/7/25
+ * Description: A simple text-based adventure game where players navigate through different rooms.
+ * Additions: 
+ * 
+ * 
+ * 
+ * 
+ * AI has been used to make the following quality of life changes to the initial template purely for my own convenience:
+ * IMPORTANT: I AM NOT COUNTING ANY OF THESE AS MY ADDITIONS, I ONLY DID THEM FOR CODE AND RUN QUALITY.
+ * 1. Combined Room and RoomAdventure into one file with a static nested class.
+ * 2. Fixed input parsing to handle 1-word or >2-word entries.
+ * 3. Added a 'quit' command to exit the game.
+ * 4. Moved Scanner creation outside the game loop to save resources.
+ * 5. Added printing of the 'status' message so the player sees feedback.
+ * 6. Fixed inventory display to print on a single line.
+ * 7. Improved 'handleTake' to remove the item from the room and check for a full inventory.
+ * 8. Fixed exit logic in setupGame for rooms 3 and 4.
+ * 9. Added null checks in Room.toString() to prevent crashes.
+ */
 
 import java.util.Scanner;
 
