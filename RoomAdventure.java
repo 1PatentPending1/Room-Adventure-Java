@@ -23,7 +23,7 @@ public class RoomAdventure{
     // main function
     public static void main(String[] args){
         setupGame();
-    }
+    
 
     while(true){
         System.out.println(currentRoom.toString());
@@ -49,18 +49,64 @@ public class RoomAdventure{
 
         switch (verb){
             case "go":
-                HandleGo(noun);
+                handleGo(noun);
                 break;
             case "look":
-                HandleLook(noun);
+                handleLook(noun);
                 break;
             case "take":
-                HandleTake(noun);
+                handleTake(noun);
                 break;
+            default: status = DEFAULT_STATUS;
         }
-        
-
     }
+}
+
+
+
+private static void handleGo(String noun){
+    status = "I don't see that room.";
+    for (int i = 0; i < currentRoom.getExitDirections().length; i++){
+        if (noun.equals(currentRoom.getExitDirections()[i])){
+            //for strings, we use .equals() instead of ==
+            currentRoom = currentRoom.getExitDestinations()[i];
+            status = "You go " + noun + ".";
+            break;
+        }
+    }
+}
+
+private static void handleLook(String noun){
+    status = "I don't see that item.";
+    String[] items = currentRoom.getItems();
+    String[] descriptions = currentRoom.getItemDescriptions();
+
+    for (int i = 0; i < items.length; i++){
+        if (noun.equals(items[i])){
+            status = descriptions[i];
+            break;
+        }
+    }
+}
+
+private static void handleTake(String noun){
+    status = "I can't grab that item.";
+    String[] grabbables = currentRoom.getGrabbables();
+   // maybe make an addToInventory function later
+    for (int i = 0; i < grabbables.length; i++){
+        if (noun.equals(grabbables[i])){
+            for (int j = 0; j < inventory.length; j++){
+                if (inventory[j] == null){
+                    inventory[j] = noun;
+                    status = "item added to inventory.";
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 
     public static void setupGame(){
 
@@ -136,7 +182,7 @@ class Room{
             
         }
 
-    }
+    
 
     // methods getters and setters 
     public void setExitDirections(String[] exitDirections){
@@ -200,6 +246,4 @@ class Room{
         return result += "\n";
     }
 
-
-
-
+}
