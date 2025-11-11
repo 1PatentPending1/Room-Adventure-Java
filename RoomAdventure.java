@@ -104,20 +104,51 @@ public class RoomAdventure {
         s.close(); // Close the scanner
     }
 
-    private static void handleGo(String noun) {
-        status = "I don't see an exit in that direction.";
-        String[] directions = currentRoom.getExitDirections();
-        Room[] destinations = currentRoom.getExitDestinations();
-
-        for (int i = 0; i < directions.length; i++) {
-            if (noun.equals(directions[i])) {
-                //for strings, we use .equals() instead of ==
-                currentRoom = destinations[i];
-                status = "You go " + noun + ".";
+    private static Boolean hasItem(String itemName){
+        // Win condition: player has 'key' and is in Room 4
+        boolean hasItem = false;
+        for (String item : inventory) {
+            if (itemName.equals(item)) {
+                hasItem = true;
                 break;
+                
             }
         }
+
+        return hasItem;
+
     }
+
+
+    private static void handleGo(String noun) {
+    status = "I don't see an exit in that direction.";
+    String[] directions = currentRoom.getExitDirections();
+    Room[] destinations = currentRoom.getExitDestinations();
+
+    for (int i = 0; i < directions.length; i++) {
+        if (noun.equals(directions[i])) {
+            Room destination = destinations[i];
+
+            if (destination != null && destination.getName().equals("door")) {
+                if (!hasItem("key")) {
+                    status = "The strange door is locked. You need a key to enter.";
+                    return;
+                } else {
+                    System.out.println("\nYou unlock the door with your key...\n The room is dark\n you step inside to find a light, but the door is no longer behind you... \n You are trapped...\n");
+                    currentRoom = destination;
+                    System.out.println(destination.toString());
+                    System.out.println("\nIt seems there is no way out... Your fate is certain...\n");
+                    System.out.println(" Program will now exit. Thank you for playing.");
+                    System.exit(0);
+                }
+            }
+
+            currentRoom = destination;
+            status = "You go " + noun + ".";
+            break;
+        }
+    }
+}
 
     private static void handleLook(String noun) {
         status = "I don't see that item.";
@@ -172,6 +203,7 @@ public class RoomAdventure {
         Room room2 = new Room("Room 2");
         Room room3 = new Room("Room 3");
         Room room4 = new Room("Room 4");
+        Room room5 = new Room("door"); // Locked room
 
         // Room 1 setup: Exits North (R2), East (R3)
         String[] room1ExitDirections = {"north", "east"};
@@ -198,10 +230,10 @@ public class RoomAdventure {
         room2.setGrabbables(room2Grabbables);
 
         // Room 3 setup: Exits West (R1), North (R4)
-        String[] room3ExitDirections = {"west", "north"};
-        Room[] room3ExitDestinations = {room1, room4}; // Fixed: West goes to room1
-        String[] room3Items = {"sofa", "bookshelf"};
-        String[] room3ItemDescriptions = {"A comfortable sofa.", "A tall bookshelf filled with books. One 'book' looks interesting."};
+        String[] room3ExitDirections = {"west", "north", "door"}; // Added "door" as a direction for the locked exit
+        Room[] room3ExitDestinations = {room1, room4, room5}; // Added door as a destination for the locked exit
+        String[] room3Items = {"sofa", "bookshelf", "door"};
+        String[] room3ItemDescriptions = {"A comfortable sofa.", "A tall bookshelf filled with books. One 'book' looks interesting.", "A strange door that you don't remember seeing before."};
         String[] room3Grabbables = {"book"};
         room3.setExitDirections(room3ExitDirections);
         room3.setExitDestinations(room3ExitDestinations);
@@ -221,8 +253,21 @@ public class RoomAdventure {
         room4.setItemDescriptions(room4ItemDescriptions);
         room4.setGrabbables(room4Grabbables);
 
-        currentRoom = room1; // start in room 1
+        // DOOR room setup: No exits, just a win condition
+        String[] room5ExitDirections = {"Void"};
+        Room[] room5ExitDestinations = {room5}; // No exits
+        String[] room5Items = {"Darkness"};
+        String[] room5ItemDescriptions = {"The darkness slips through your fingers... You are overwhelmed with dread."};
+        String[] room5Grabbables = {"nothing"};
+        room5.setExitDirections(room5ExitDirections);
+        room5.setExitDestinations(room5ExitDestinations);
+        room5.setItems(room5Items);
+        room5.setItemDescriptions(room5ItemDescriptions);
+        room5.setGrabbables(room5Grabbables);
+
+        currentRoom = room1; // Start game in Room 1
     }
+    
 
     //
     // --- Static Nested Room Class ---
@@ -243,6 +288,9 @@ public class RoomAdventure {
             this.name = name; // use this to set the name of the room
         }
 
+        public String getName() {
+            return this.name;
+        }
         // methods getters and setters 
         public void setExitDirections(String[] exitDirections) {
             this.exitDirections = exitDirections;
